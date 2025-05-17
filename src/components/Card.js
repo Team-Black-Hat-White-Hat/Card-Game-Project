@@ -8,6 +8,7 @@ export class Card extends HTMLElement {
         this.cost = cost;
         this.description = description;
         this.image = image;
+        this.flipped = false;
 
         //create the card element
         const shadow = this.attachShadow({mode: 'open'});
@@ -24,10 +25,21 @@ export class Card extends HTMLElement {
     font-family: 'Segoe UI', sans-serif;
     box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
     box-sizing: border-box;
+    transform-style: preserve-3d;
+    transition: transform 0.6s;
 
 }
 
+.card.flipped {
+    transform: rotateY(180deg);
+}
 
+.card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+}
 
 .cost {
     position: absolute;
@@ -123,6 +135,15 @@ export class Card extends HTMLElement {
         shadow.append(style);
     }
 
+
+    flipCard() {
+        this.flipped = !this.flipped;
+        if (this.flipped) {
+            this.article.classList.add('flipped');
+        } else {
+            this.article.classList.remove('flipped');
+        }
+    }
 
     /**
      * render the card in specific HtmlElement
