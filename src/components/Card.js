@@ -15,7 +15,7 @@ export class Card extends HTMLElement {
         this.article = document.createElement('article');
         const style = document.createElement('style');
         style.textContent = `
-    .card {
+.card {
     position: relative;
     width: 200px;
     padding: 12px 10px;
@@ -129,12 +129,13 @@ export class Card extends HTMLElement {
   }
 `;
 
-        this.article.className = 'card';
+        this.article.className = 'card';        
+
+        this.article.addEventListener('click', () => this.flipCard());
 
         shadow.append(this.article);
         shadow.append(style);
     }
-
 
     flipCard() {
         this.flipped = !this.flipped;
