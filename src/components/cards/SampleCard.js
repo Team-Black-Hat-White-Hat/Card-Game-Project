@@ -19,4 +19,6 @@ class SampleCard extends Card {
     play(target) {
     }
 }
+customElements.define("sample-card", SampleCard);
+//This line is needed to let us use the new keyword to create instances of the class.
 export {SampleCard};
