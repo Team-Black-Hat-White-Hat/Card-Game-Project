@@ -1,5 +1,7 @@
 Last time ([Checkpoint 1](https://github.com/Team-Black-Hat-White-Hat/cse110-sp25-group02/tree/main/admin/cipipeline))
+
 Since we have done a few sprints we are now using the branch structure that we proposed in the last checkpoint.
+
 # What is currently functional, in addition to what was functional from checkpoint 1:
 1. main Branch (Production Branch)
 - This is the production branch that contains tested and deployable code.
@@ -17,6 +19,8 @@ Since we have done a few sprints we are now using the branch structure that we p
 - Developers work independently in these branches.
 - Once completed, the feature branch is merged back into dev via a Pull Request.
 
+4. Testing: Since HTMLElement isn't testable in Jest's native environment, we create a virtual environment using jsdom.
+
 # What is planned
 
 4.bugfix/xxx or hotfix/xxx Branches (Fix Branches)
@@ -26,8 +30,8 @@ Since we have done a few sprints we are now using the branch structure that we p
 - We have not yet encountered any bugs in dev or main that require bugfix or hotfixes.
 
 # Demonstration of how it is implemented in GitHub Actions
-![](Screenshot showing a pull request that passed unit tests)
+![https://github.com/Team-Black-Hat-White-Hat/Card-Game-Project/blob/main/admin/cipipeline/passunittest.jpg](Screenshot showing a pull request that passed unit tests)
 Screenshot showing a pull request that passed automatic unit tests, but requires a review to be able to merge.
 
-![](Screenshot showing a pull request that failed unit tests)
+![https://github.com/Team-Black-Hat-White-Hat/Card-Game-Project/blob/main/admin/cipipeline/failunittest.jpg](Screenshot showing a pull request that failed unit tests)
 Screenshot showing a pull request that failed automatic unit tests, and so cannot merge (and also requires a review)
