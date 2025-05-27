@@ -46,6 +46,19 @@ body {
     height: 40%;
     background: linear-gradient(to top, #F4E2D8, #E0C097, #C2A679);
     opacity: 1;
+    z-index: 2;
+}
+
+.sun{
+  position: absolute;
+  bottom: 33%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px; 
+  height: 100px; 
+  border-radius: 150px 150px 0 0; 
+  background-color: rgb(255, 95, 26); 
+  z-index: 1;
 }
 
 
