@@ -8,14 +8,19 @@ import * as CardManager from '../src/components/CardManager.js';
 
 jest.spyOn(CardManager, 'shuffle').mockImplementation(arr => arr); // no-op shuffle
 
-let Deck;
+// ✅ Mock Deck class
+class MockDeck extends HTMLElement {
+  #cards = [];
+  addCard(card) {
+    this.#cards.push(card);
+  }
+  deckSize() {
+    return this.#cards.length;
+  }
+}
+customElements.define('player-deck', MockDeck);
 
-beforeAll(async () => {
-  const DeckModule = await import('../src/components/Deck.js');
-  Deck = DeckModule.default;
-});
-
-describe('Discard tests with real Card and shuffle()', () => {
+describe('Discard tests with Card and mocked Deck', () => {
   let discard, card1, card2;
 
   beforeEach(() => {
@@ -41,7 +46,7 @@ describe('Discard tests with real Card and shuffle()', () => {
     });
   });
 
-  test('addCard works for valid Card', () => {
+  test('addCard adds a valid card and returns 0', () => {
     expect(discard.addCard(card1)).toBe(0);
     expect(discard.discard).toContain(card1);
   });
@@ -51,7 +56,7 @@ describe('Discard tests with real Card and shuffle()', () => {
     expect(discard.discard.length).toBe(0);
   });
 
-  test('removeCard works and returns index', () => {
+  test('removeCard removes a card and returns index', () => {
     discard.addCard(card1);
     discard.addCard(card2);
     const index = discard.removeCard(card1);
@@ -59,7 +64,7 @@ describe('Discard tests with real Card and shuffle()', () => {
     expect(discard.discard).not.toContain(card1);
   });
 
-  test('removeCard returns -1 for card not in pile', () => {
+  test('removeCard returns -1 for missing or invalid card', () => {
     expect(discard.removeCard(card1)).toBe(-1);
   });
 
@@ -69,12 +74,13 @@ describe('Discard tests with real Card and shuffle()', () => {
     expect(discard.discard.length).toBe(0);
   });
 
-  test('shuffleDiscardIntoDeck moves all cards and clears discard', () => {
-    const deck = new Deck();
+  test('shuffleDiscardIntoDeck moves cards and clears discard', () => {
+    const deck = new MockDeck();
     discard.addCard(card1);
     discard.addCard(card2);
 
     expect(deck.deckSize()).toBe(0);
+
     const result = discard.shuffleDiscardIntoDeck(deck);
     expect(result).toBe(0);
     expect(deck.deckSize()).toBe(2);
