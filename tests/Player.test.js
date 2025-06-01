@@ -1,27 +1,20 @@
 import {Player} from '../src/components/Player.js';
-import {CrashOut} from "../src/components/cards/CrashOut.js";
-import {EarlySubmission} from "../src/components/cards/EarlySubmission.js";
-import Hand from "../src/components/Hand.js";
-import Discard from "../src/components/Discard.js";
-import Deck from "../src/components/Deck.js";
-import hand from "../src/components/Hand.js";
+
 
 describe('Player class', () => {
     let player;
-    let card1;
-    let card2;
+    let dummyCard;
+
     beforeEach(() => {
+        dummyCard = { name: 'Strike' };
         player = new Player(
           100,   // maxHealth
           3,     // maxEnergy
-          new Deck(), // deck
-          new Hand(),    // hand
-          new Discard(),    // discard
+          [dummyCard], // deck
+          [],    // hand
+          [],    // discard
+          [],
         );
-        card1 = new CrashOut();
-        card2 = new EarlySubmission();
-        player.deck.addCard(card1);
-        player.deck.addCard(card2);
     });
 
     test('initialization sets correct values', () => {
@@ -31,9 +24,9 @@ describe('Player class', () => {
         expect(player.state.currentEnergy).toBe(3);
         expect(player.state.block).toBe(0);
         expect(player.isDead).toBe(false);
-        expect(player.deck.size()).toBe(2);
-        expect(player.hand.hand.length).toBe(0);
-        expect(player.discard.size()).toBe(0);
+        expect(player.deck.length).toBe(1);
+        expect(player.hand.length).toBe(0);
+        expect(player.discard.length).toBe(0);
         expect(player.state.effect.length).toBe(0);
     });
 
@@ -80,45 +73,21 @@ describe('Player class', () => {
         expect(player.state.currentEnergy).toBe(player.state.maxEnergy);
     });
 
-
-
-    test('drawCards draws correct number of cards', () => {
-        const result = player.drawCards(2);
-        expect(result).toBeUndefined(); // Currently no return unless failure
-        expect(player.hand.size()).toBe(2);
+    test('moveTempDiscardToDiscard moves cards to discard', () => {
+        const card = { name: 'TempCard' };
+        player.tempDiscard.push(card);
+        player.moveTempDiscardToDiscard();
+        expect(player.discard).toContain(card);
+        expect(player.tempDiscard.length).toBe(0);
     });
 
-    test('drawCards returns -1 if not enough cards in deck', () => {
-        const result = player.drawCards(3);
-        expect(result).toBe(-1);
-        expect(player.hand.size()).toBe(0);
-    });
-
-    test('discardCard moves card from hand to tempDiscard', () => {
-        player.hand.addCard(card1);
-        player.discardCard(card1);
-        expect(player.hand.getCards()).not.toContain(card1);
-        expect(player.tempDiscard.getCards()).toContain(card1);
-    });
-
-    test('discardHand moves all from hand to discard via tempDiscard', () => {
-        player.hand.addCard(card1);
-        player.hand.addCard(card2);
-        player.hand.addCard(card1)
-        player.discardHand();
-        expect(player.hand.size()).toBe(0);
-        expect(player.discard.getCards()).toContain(card1);
-        expect(player.discard.getCards()).toContain(card2);
-    });
-
-    test('shuffleDiscardIntoDeck transfers and shuffles discard into deck', () => {
-        player.discard.addCard(card1);
-        player.discard.addCard(card2);
-
+    test('Move discard to deck',()=>{
+        const card = {name:'TempCard'};
+        player.discard.push(card);
+        const tempDiscard = [...player.discard];
+        tempDiscard.push(dummyCard);
         player.shuffleDiscardIntoDeck();
+        expect(player.deck).toEqual(expect.arrayContaining(tempDiscard));
 
-        expect(player.deck.getCards()).toContain(card1);
-        expect(player.deck.getCards()).toContain(card2);
-        expect(player.discard.size()).toBe(0);
-    });
+    })
 });

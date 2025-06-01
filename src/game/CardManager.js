@@ -1,10 +1,5 @@
-import {Pile} from "../components/Pile.js";
 
-/**
- * @deprecated Use Deck.shuffle() instead
- * @param {Card[]} cards
- * @returns {*}
- */
+//Function to shuffle cards (pass-by-reference)
 export function shuffle(cards) {
   // Fisher-Yates shuffle algorithm
   for (let i = cards.length-1; i >= 0; i--) {
@@ -27,38 +22,27 @@ export function draw(cards, number) {
   
 }
 
-/**
- *
- * @param {Card} card
- * @param {Pile} fromCollection
- * @param {Pile} toCollection
- */
+//Function to move cards from one collection to another (pass-by-reference)
 export function moveCard(card, fromCollection, toCollection) {
   // Moving cards between deck, hand, discard, etc.
   //Note: Use the reference of the card when using this function and not it's
   //actual value as it would cause issue with card duplicates.
-  const index = fromCollection.cards.indexOf(card);
+  const index = fromCollection.indexOf(card); 
 
-  if (index >= 0 && index < fromCollection.cards.length) {
-    fromCollection.cards.splice(index, 1);
-    toCollection.addCard(card);
+  if (index >= 0 && index < fromCollection.length) {
+    fromCollection.splice(index, 1);
+    toCollection.push(card);
   }
 }
 
-/**
- * Filters an array of cards based on a given condition.
- * @param {Pile} pile
- * @param condition
- * @returns {*[]}
- */
-export function filterCards(pile, condition) {
+//Function to filter cards (pass-by-value)
+export function filterCards(cards, condition) {
 // Filter cards based on a condition (e.g., type, rarity, etc.)
 //Note: parameter 'condition' is a function being passed in
-  if(pile.size()===0) return  [];
   const result = [];
 
-  for (let i = 0; i < pile.size(); i++) {
-    const card = pile.cards[i];
+  for (let i = 0; i < cards.length; i++) {
+    const card = cards[i];
     if (condition(card)) {
         result.push(card);
     }

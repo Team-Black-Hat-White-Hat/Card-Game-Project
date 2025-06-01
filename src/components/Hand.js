@@ -1,24 +1,17 @@
 /**
  * @jest-environment jsdom
  */
-import {Pile} from "./Pile.js";
-import {Card} from './Card.js'
 
-class Hand extends Pile {
+class Hand extends HTMLElement {
 
   constructor() {
     super();
-
-    /**
-     * @deprecated
-     */
-    this.discardPile = new Pile();
-
+    this.discardPile = null;
     this.attachShadow({ mode: 'open' });
-
+    
     this.handArea = document.createElement('div');
     this.handArea.className = 'handArea';
-
+    
     const style = document.createElement('style');
     style.innerText = `
           .handArea{
@@ -34,9 +27,9 @@ class Hand extends Pile {
           }  
             `;
     this.shadowRoot.append(this.handArea, style);
-
-
-	this.hand = new Proxy(this.cards, {
+	
+	const internalHand = [];
+	this.hand = new Proxy(internalHand, {
 		set: (target, prop, value) => {
 			target[prop] = value;
 			if (!isNaN(prop) || prop === 'length') {
@@ -53,77 +46,66 @@ class Hand extends Pile {
 }
 
   /**
-   * Override addCard to trigger Proxy
-   * @param card
-   * @returns {number}
+   * @param {Card} card - The card to be added.
+   * @returns {void}
    */
   addCard(card) {
-    const result = super.addCard(card);
-    this.hand[this.size() - 1] = card; //
-    return result;
+    //Adds a card to the hand
+    this.hand.push(card);
   }
 
   /**
-   * Override removeCard to trigger Proxy
-   * @param card
-   * @returns {number}
+   * @param {Card} card - The card to be removed.
+   * @returns {void}
    */
-
   removeCard(card) {
-    if (!(card instanceof Card)) return -1;
-    const index = this.cards.indexOf(card);
-    if (index === -1) return -1;
-    delete this.hand[index];
-    this.compactHand();
-    return index;
+    //Removes a card from the hand
+    const index = this.hand.indexOf(card);
+
+    //Index has been found
+    if (index !== -1) {
+      this.hand.splice(index, 1);
+    }
   }
 
   /**
-   * Compress the array and remove the empty slots.
+   * @param {Card} card - The card to be played.
+   * @param {Object} target - The target for the card's effect (e.g. an enemy).
+   * @returns {void}
    */
-  compactHand() {
-    const newHand = this.hand.filter(card => card instanceof Card);
-
-    for (let i = 0; i < this.hand.length; i++) {
-      delete this.hand[i];
-    }
-
-    this.cards.length = 0;
-
-    
-    newHand.forEach((card, index) => {
-      this.hand[index] = card;
-    });
+  playCard(card, target) {
+    // Plays a card from the hand.
+    // Should call the specific card’s own card.play,
+    // then this.removeCard(card)
+    card.play(target);
+    this.removeCard(card);
   }
 
-
-/*
-
-  /!**
-   * @deprecated move to Player.js
+  /**
    * @param {Card} card - The card to discard.
    * @returns {void}
-   *!/
+   */
   discardCard(card) {
     //Moves a card from the hand to the discard pile
     this.removeCard(card);
     this.discardPile.addCard(card);
   }
 
-  /!**
-   * @deprecated move to Player.js
+  /**
    * @returns {void}
-   *!/
+   */
   discardHand() {
     // Discards all cards in the hand,
     // called by playerManager at the end of a turn
-    const cardsToDiscard = this.hand.filter(card => card instanceof Card);
-
+    const cardsToDiscard = [];
+    for (let i = 0; i < this.hand.length; i++) {
+      cardsToDiscard.push(this.hand[i]);
+    }
 
     for (let i = 0; i < cardsToDiscard.length; i++) {
       this.discardCard(cardsToDiscard[i]);
     }
-  }*/
+  }
 
   /**
    * @returns {void}
@@ -136,7 +118,6 @@ class Hand extends Pile {
       this.handArea.append(card);
     });
   }
-
 }
 
 export default Hand;

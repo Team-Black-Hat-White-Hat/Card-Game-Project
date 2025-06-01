@@ -1,6 +1,4 @@
-import {shuffle, draw, moveCard, filterCards} from '../src/game/CardManager.js'
-import Card from "../src/components/Card.js";
-import {Pile} from "../src/components/Pile.js";
+import {shuffle, draw, moveCard, filterCards} from '../src/game/CardManager.js' 
 
 /**
  * 
@@ -9,18 +7,16 @@ import {Pile} from "../src/components/Pile.js";
  */
 
 const cards = [
-  new Card({ name: 'Free Boba', type: 'special', cost: 1 }),
-  new Card( { name: 'Early Submission', type: 'special', cost: 0 }),
-  new Card(  { name: 'CS Crash Out', type: 'attack', cost: 1 })
+  { name: 'Free Boba', type: 'special', cost: 1 },
+  { name: 'Early Submission', type: 'special', cost: 0 },
+  { name: 'CS Crash Out', type: 'attack', cost: 1 }
 ];
-const cardPile = new Pile(cards);
 
 const cardsAttack = [
-  new Card({name: 'Redbull Crashout', type: 'attack', cost: 0 }),
-  new Card( {name: 'CSE 110 Midterm', type: 'attack', cost: 1}),
-  new Card({name: 'Freeze Ray', type: 'attack', cost: 2})
+  {name: 'Redbull Crashout', type: 'attack', cost: 0 },
+  {name: 'CSE 110 Midterm', type: 'attack', cost: 1},
+  {name: 'Freeze Ray', type: 'attack', cost: 2}
 ];
-const attackPile = new Pile(cardsAttack);
 
 function createStandardDeck() {
   const suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades'];
@@ -63,41 +59,55 @@ const gamblerDeck = createStandardDeck();
  * 
  */
 test('filterCards filters by cost', () => {
-  const result = filterCards(cardPile, card => card.cost === 0);
+  const result = filterCards(cards, card => card.cost === 0);
 
   expect(result).toEqual([
-    new Card({ name: 'Early Submission', type: 'special', cost: 0 })
+    { name: 'Early Submission', type: 'special', cost: 0 }
   ]);
 });
 
 test('filterCards filters by type', () => {
-  const result = filterCards(cardPile, card => card.type === 'attack');
+  const result = filterCards(cards, card => card.type === 'attack');
 
   expect(result).toEqual([
-    new Card({ name: 'CS Crash Out', type: 'attack', cost: 1 })
+    { name: 'CS Crash Out', type: 'attack', cost: 1 }
   ]);
 });
 
 test('filterCards filters by type with multiple', ()=>{
-  const result= filterCards(attackPile, card => card.type === 'attack');
-  expect(result).toEqual(cardsAttack)
+  const result= filterCards(cardsAttack, card => card.type === 'attack');
+  expect(result).toEqual([
+    {name: 'Redbull Crashout', type: 'attack', cost: 0 },
+    {name: 'CSE 110 Midterm', type: 'attack', cost: 1},
+    {name: 'Freeze Ray', type: 'attack', cost: 2}
+  ])
 });
 
 test('filterCards returns empty if no type match', () => {
-  const result = filterCards(cardPile, card => card.type === 'healing');
+  const result = filterCards(cards, card => card.type === 'healing');
   expect(result).toEqual([]);
 });
 
 test('filterCards returns empty if no cost match', () => {
-  const result = filterCards(cardPile, card => card.cost === 6);
+  const result = filterCards(cards, card => card.cost === 6);
   expect(result).toEqual([]);
 });
 
 test('filterCards handles empty input', () => {
-  const result = filterCards(new Pile(), card => card.cost === 0);
+  const result = filterCards([], card => card.cost === 0);
   expect(result).toEqual([]);
 });
 
+test('filterCards handles a regular deck of cards', () =>{
+  const gambleYAY = createStandardDeck();
+  const blackCards = filterCards(gambleYAY, card =>
+    card.suit === 'Clubs' || card.suit === 'Spades'
+  );
+  expect(blackCards.length).toBe(26);
+  expect(blackCards.every(card=>
+    card.suit === 'Spades' || card.suit === 'Clubs'
+  )).toBe(true);
+});
 
 
 /**
@@ -106,58 +116,66 @@ test('filterCards handles empty input', () => {
  * 
  */
 test('moveCard works with objects', () => { 
-  let hand = new Pile([... cards]) ;
-  let deck =new Pile([
-    new Card({ name: 'Severe Crashout', type: 'attack', cost: 1 }),
-    new Card({ name: 'Fake Sleep', type: 'defense', cost: 1 }),
-  ]) ;
+  let hand = cards;
+  let deck = [
+    { name: 'Severe Crashout', type: 'attack', cost: 1 },
+    { name: 'Fake Sleep', type: 'defense', cost: 1 },
+  ];
 
   //Makes sure nothing happens if the card is not in the deck
-  moveCard(new Card({ name: 'Free Boba', type: 'special', cost: 1 }), hand, deck);
+  moveCard({ name: 'X', type: 'X', cost: 0 }, hand, deck);
   //Keep note that the index changes with the deck being popped
-  moveCard(deck.getCards()[0], deck, hand);
-  moveCard(deck.getCards()[0], deck, hand);
+  moveCard(deck[0], deck, hand); 
+  moveCard(deck[0], deck, hand); 
   //Makes sure that nothing happens if nothing is in the deck
-  moveCard(deck.getCards()[0], deck, hand);
+  moveCard(deck[0], deck, hand); 
 
   let expectHand = [
     cards[0], 
     cards[1], 
     cards[2], 
-    new Card({ name: 'Severe Crashout', type: 'attack', cost: 1 }),
-    new Card({ name: 'Fake Sleep', type: 'defense', cost: 1 })
+    { name: 'Severe Crashout', type: 'attack', cost: 1 },
+    { name: 'Fake Sleep', type: 'defense', cost: 1 }
   ];
-  /**
-   *
-   * @type {Card[]}
-   */
   let expectDeck = [];
 
-  expect(deck.getCards()).toEqual(expectDeck);
-  expect(hand.getCards()).toEqual(expectHand);
+  expect(deck).toEqual(expectDeck);
+  expect(hand).toEqual(expectHand);
 
 });
 
 test('moveCard with Card Duplicates', ()=> {
-  let hand =new Pile([
-    new Card({ name: 'Severe Crashout', type: 'attack', cost: 1 }),
-    new Card({ name: 'Fake Sleep', type: 'defense', cost: 1 }),
-    new Card({ name: 'Severe Crashout', type: 'attack', cost: 1 })
-  ]) ;
+  let hand = [
+    { name: 'Severe Crashout', type: 'attack', cost: 1 },
+    { name: 'Fake Sleep', type: 'defense', cost: 1 },
+    { name: 'Severe Crashout', type: 'attack', cost: 1 }
+  ];
 
-  let deck = new Pile([...cards]);
+  let deck = cards;
 
   let expectHand = [
-    new Card({ name: 'Severe Crashout', type: 'attack', cost: 1 }),
-    new Card({ name: 'Fake Sleep', type: 'defense', cost: 1 })
+    { name: 'Severe Crashout', type: 'attack', cost: 1 },
+    { name: 'Fake Sleep', type: 'defense', cost: 1 }
   ];
-  moveCard(hand.getCards()[2], hand, deck);
+  moveCard(hand[2], hand, deck);
 
-  expect(hand.getCards()[0]).toEqual(expectHand[0]);
-  expect(hand.getCards()[1]).toEqual(expectHand[1]);
+  expect(hand[0]).toEqual(expectHand[0]);
+  expect(hand[1]).toEqual(expectHand[1]);
 });
 
+test('moveCard works with a standard deck to hand', ()=>{
+  const deck = createStandardDeck();
+  const hand = []
 
+  const movedCard = deck.find(card=> card.rank === 'K' && card.suit === 'Diamonds')
+
+  moveCard(movedCard, deck, hand);
+
+  expect(hand).toContainEqual(movedCard);
+  expect(deck).not.toContainEqual(movedCard);
+  expect(deck.length).toBe(51);
+  expect(hand.length).toBe(1);
+})
 
 /**
  * 
@@ -171,7 +189,7 @@ test('shuffle check no card loss', () => {
   expect(deck.sort()).toEqual(original.sort());
 });
 
-
+// TODO since the shuffle function will change the deck itself so shuffleDeck is definitely equal to deck after shuffling
 test('shuffle small deck', () => {
   const deck = [1, 2, 3, 4, 5, 6];
   const original = [1, 2, 3, 4, 5, 6];

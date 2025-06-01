@@ -1,14 +1,6 @@
 export class Card extends HTMLElement {
-    /**
-     *
-     * @param {string} name
-     * @param {string} type
-     * @param {number} cost
-     * @param {string} description
-     * @param {string} effect
-     * @param {string} image
-     */
-    constructor({name, type=null, cost=null, description=null, effect=null, image=null}) {
+
+    constructor({name, type, cost, description, effect, image}) {
         super();
         this.name = name;
         this.type = type;
@@ -171,7 +163,9 @@ export class Card extends HTMLElement {
 
     }
 
-    //auto render
+    /**
+     * auto render
+     */
     connectedCallback(){
         this.render();
     }
