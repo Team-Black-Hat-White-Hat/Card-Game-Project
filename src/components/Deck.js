@@ -1,5 +1,16 @@
 import {Card} from './Card.js';
 
+
+/**
+ * @class Deck
+ * @extends Pile
+ * @description deck. The parent class Pile already provides a cards array that can be used directly.
+ */
+
+
+
+
+
 class Deck extends HTMLElement {
     
     #deck;
@@ -30,13 +41,15 @@ class Deck extends HTMLElement {
         return index; //returns index of deleted card or -1 if no such card was found
     }
 
+
     /**
      * 
      * @returns {Card} - drawed card
      */
     drawCard() {
+
         let drawedCard = this.#deck.pop();
-        return drawedCard;
+        return drawedCard; ///could we just do return this.#deck.pop()?
     }
 
     
@@ -55,6 +68,7 @@ class Deck extends HTMLElement {
     showDeck() {
         return this.#deck;
     }
+
 }
 
 customElements.define('player-deck', Deck);
