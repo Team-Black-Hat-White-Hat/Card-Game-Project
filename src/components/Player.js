@@ -4,7 +4,9 @@ import Hand from './Hand.js';
 import Discard from './Discard.js';
 import {Pile} from './Pile.js';
 import Card from './Card.js';
-import '../styles/player.css';
+if (typeof process === 'undefined' || process.env.NODE_ENV !== 'test') {
+    import('../styles/player.css');
+}
 
 
 //A player has: current health, max health, current energy,
