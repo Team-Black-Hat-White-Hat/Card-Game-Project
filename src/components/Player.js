@@ -4,6 +4,7 @@ import Hand from './Hand.js';
 import Discard from './Discard.js';
 import {Pile} from './Pile.js';
 import Card from './Card.js';
+import '../styles/player.css';
 
 
 //A player has: current health, max health, current energy,
@@ -17,97 +18,31 @@ export class Player extends HTMLElement{
 
 
   style=`
-        body {
-            font-family: sans-serif;
-            background: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .player-ui {
-            width: 300px;
-            padding: 10px;
-        }
-
-
-        .block-row {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            margin-bottom: 8px;
-            font-size: 16px;
-        }
-        .block-row  img{
-            width: 20px;
-        }
-
-
-        #enemyImg{
-            width: 100%;
-            align-items: center;
-        }
-
-        .hp-bar-container {
-            position: relative;
-            height: 24px;
-            border: 1px solid #aaa;
-            border-radius: 6px;
-            background-color: #ddd;
-            overflow: hidden;
-        }
-
-        .hp-bar {
-            height: 100%;
-            width: 100%;
-            background: linear-gradient(to right, #aef, #5cf);
-            transition: width 0.3s ease;
-        }
-
-        .hp-text {
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            color: #000;
-            text-shadow: 1px 1px #fff;
-            pointer-events: none;
-        }
-
-        .effect-container{
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-        .effectIcon{
-            width: 10%;
+        :host {
+            display: block;
         }
   `;
 
   template = (t)=>`
-   <img src="/src/img/sprite.png" alt="player" id="enemyImg">
-    <div class="block-row">
-        <img src="/src/img/shieldicon.png" alt="block">
-        <span id="block">${t.state.block}</span>
-        <img src="/src/img/energyicon.png" alt="energy">
-        <span id="energy">${t.state.currentEnergy}/${t.state.maxEnergy}</span>
-    </div>
-    <div class="hp-bar-container">
-        <div class="hp-text">${t.state.currentHealth}/${t.state.maxHealth}</div>
-        <div class="hp-bar"></div>
-    </div>
-    <div class="effect-container">
-<!--  example  -->
-<!--        <img class="effectIcon" src="/src/img/attackUpIcon.png" alt="attackUp">-->
-<!--        <img class="effectIcon" src="/src/img/defenseDownIcon.png" alt="defenseDown">-->
+    <div class="player-ui">
+        <img src="/src/img/sprite.png" alt="player" id="enemyImg">
+        <div class="block-row">
+            <img src="/src/img/shieldicon.png" alt="block">
+            <span id="block">${t.state.block}</span>
+            <img src="/src/img/energyicon.png" alt="energy">
+            <span id="energy">${t.state.currentEnergy}/${t.state.maxEnergy}</span>
+        </div>
+        <div class="hp-bar-container">
+            <div class="hp-text">${t.state.currentHealth}/${t.state.maxHealth}</div>
+            <div class="hp-bar" style="width: ${(t.state.currentHealth / t.state.maxHealth) * 100}%"></div>
+        </div>
+        <div class="effect-container">
+            ${t.state.effect.map(effect => `
+                <div class="effect-icon" title="${effect.name}">
+                    <img src="/src/img/${effect.icon}.png" alt="${effect.name}">
+                </div>
+            `).join('')}
+        </div>
     </div>
   `;
   /**
@@ -173,9 +108,15 @@ export class Player extends HTMLElement{
     this.state.block = Math.max(this.state.block - amount, 0);
     this.state.currentHealth -= effectiveDamage;
 
+    // Trigger damage animation
+    this.div.classList.add('damage-flash');
+    setTimeout(() => {
+        this.div.classList.remove('damage-flash');
+    }, 300);
+
     if (this.state.currentHealth <= 0) {
-      this.state.currentHealth = 0;
-      this.die();
+        this.state.currentHealth = 0;
+        this.die();
     }
   }
 
@@ -282,8 +223,13 @@ export class Player extends HTMLElement{
    */
   // TODO replace the object with enemy
   playCard(card, target) {
+    // Trigger card play animation
+    this.div.classList.add('card-play');
+    setTimeout(() => {
+        this.div.classList.remove('card-play');
+    }, 300);
 
-    // Should call the specific card’s own card.play,
+    // Should call the specific card's own card.play,
     // then this.removeCard(card)
     try{
       if(!this.spendEnergy(card.cost)) throw new Error('you don\'t have enough energy');
