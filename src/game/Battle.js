@@ -2,6 +2,7 @@
 // Refactored battle system using the EventBus for decoupled event handling
 import { EventBus } from './EventBus.js';
 import {isPlayerDead} from './PlayerManager.js';
+import { renderUI } from '../app.js';
 
 export class Battle {
   /**
@@ -131,6 +132,12 @@ export class Battle {
     if(isPlayerDead(this.player)){
       this.battleOver = true;
       this.player.die();
+      renderUI('goScreen');
+    }
+
+    if (this.enemy.HP <= 0) {
+      this.battleOver = true;
+      renderUI('winScreen');
     }
 
     // TODO add enemy dead check

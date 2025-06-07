@@ -18,7 +18,7 @@ class CrashOut extends Card {
      * So we don't need to check it here.
      */
     play(enemy) {
-        enemy.takeDamage(3);
+        enemy.takeDamage(40);
     }
 }
 if (!customElements.get('crash-out')) {
