@@ -99,6 +99,7 @@ body {
     justify-content: center;
     align-items: center;
     width: 30%;
+    background-color: transparent;
   }
   
   .enemies {

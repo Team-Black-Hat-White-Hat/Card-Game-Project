@@ -172,7 +172,11 @@ export class Player extends HTMLElement{
     const effectiveDamage = Math.max(amount - this.state.block, 0);
     this.state.block = Math.max(this.state.block - amount, 0);
     this.state.currentHealth -= effectiveDamage;
-
+    const sprite = document.getElementsByClassName('player');     //background changes color when player recieved damage.
+    sprite.style.backgroundColor = 'red';
+    setTimeout(()=> {
+      sprite.style.backgroundColor = 'transparent';
+      }, 1000);
     if (this.state.currentHealth <= 0) {
       this.state.currentHealth = 0;
       this.die();
