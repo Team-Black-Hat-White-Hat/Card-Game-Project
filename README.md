@@ -1,41 +1,35 @@
-# Team Update 1
-https://www.youtube.com/watch?v=M326jWUw2Co
-# Directory Guide
-```Card Game Project  
-├── src  
-│   ├── components  
-│   │   ├── Card.js             // Handles individual card logic and rendering  
-│   │   ├── Deck.js             // Manages the player's deck  
-│   │   ├── Hand.js             // Manages the player's hand  
-│   │   ├── Discard.js          // Manages the discard pile  
-│   │   ├── Player.js           // Handles player-related logic  
-│   │   └── Enemy.js            // Handles enemy-related logic  
-│   ├── game  
-│   │   ├── battle.js           // Manages the overall game state  
-│   │   ├── CardManager.js      // Handles card-related operations  
-│   │   ├── DeckManager.js      // Handles deck-related operations  
-│   │   ├── HandManager.js      // Handles hand-related operations  
-│   │   └── EnemyManager.js     // Manages enemy behaviors and interactions  
-│   ├── assets  
-│   │   ├── cards               // Images or data for cards  
-│   │   ├── enemies             // Images or data for enemies  
-│   │   └── players             // Images or data for players  
-│   ├── styles  
-│   │   ├── main.css            // Styling for the game front page  
-│   │   ├── card.css            // Styling for cards  
-│   │   ├── deck.css            // Styling for the deck  
-│   │   └── hand.css            // Styling for the hand  
-│   └── app.js                  // Main entry point for the game logic, contains event listeners  
-├── tests  
-│   ├── Card.test.js            // Unit tests for Card.js  
-│   ├── Deck.test.js            // Unit tests for Deck.js  
-│   ├── Hand.test.js            // Unit tests for Hand.js  
-│   ├── GameState.test.js       // Unit tests for GameState.js  
-│   ├── Player.test.js          // Unit tests for Player.js  
-│   ├── Enemy.test.js           // Unit tests for Enemy.js  
-│   └── [Add more as needed]  
-├── public  
-│   └── index.html              // Front page of game  
-├── package.json                // Project dependencies and scripts  
-├── README.md                    
-└── .gitignore        ```           
+# How to play
+## Method 1
+1. Download the source code to your local machine
+2. Run a local web server of your choice, such as VSCode's Live Server extension or npm live-server. The following instructions will explain how to use npm live-server.
+3. Open up a terminal (command prompt) and run `npm install live-server `
+4. Navigate to the source code's root directory
+5. In that directory, run `npx live-server `. A browser window should open up.
+6. Nagivate to the file ../src/title/index.html 
+7. Done!
+
+## Method 2
+Play it right in your browser [here](https://v3yu.github.io/Card-Game-Project/src/title/index.html). This is a personal fork made by a team member _after_ the code freeze date but the only changes made were image file paths in order to make it work on GitHub Pages. Everything else is exactly the same as the moment the project was submitted.
+
+## FAQ
+
+Q: The page is blank after the opening cutscenes!
+
+A: You probaby tried to open the webpage locally (via file:// protocol) by double clicking the .html file. JavaScript modules, which our game relies on, are only supported via HTTP(S). Try one of the methods above instead.
+
+Q: The cards are overlapping the player and enemy character!
+
+A: Our game is designed to be played on a desktop computer web browser. It is not reccomended to play on tablet or mobile.
+
+Q: Powell used a move but nothing happened!
+
+A: He used a buff or debuff, which are not yet implemented.
+
+Q: I lost all my block at the end of the turn!
+
+A: This is working as intended so that players cannot 'stack' block across turns. Try to play smartly with attacks, heals, and blocks.
+
+For any other questions, feel free to contact any of the team members who contributed to this repo :)
+
+
+
