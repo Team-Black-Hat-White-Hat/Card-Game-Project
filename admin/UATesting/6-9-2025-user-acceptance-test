@@ -1,0 +1,20 @@
+User's background: Not a member of our team but has taken CSE110 previously, experienced player of Slay the Spire.
+I had the user open up our repo and follow the instructions in our Readme. They opted to play from the deployed fork on v3yu account.
+These notes are from their comments whilst playing through our game.
+
+- user couldn't figure out what element to click in the first cutscene because it was all black
+- spaghetti code shield card is bugged, doesn't correctly give extra block if you didn't attack
+- user didn't read the flavor text on cards or powell dialogue (was apparently too focused on winning)
+- user thinks freeboba should be a 0 cost card (it's not free and its effect is strictly worse than Trip to Student Health)
+- there is no way to go back to the home page / restart the game
+- block and energy icons are too small but HP bar is a good size
+- energy icon should visually match energy on cards 
+- they think they should be able to see at least some of the text on bottom of card before hovering, like in Slay The Spire
+- they liked the story cutscene and thinks the story/visual novel aspect is what differentiates it from STS, I mentioned our past idea of having 7 levels with each level being a floor of Geisel and they liked that idea a lot
+
+My notes:
+- I thought the Spaghetti Code Shield card worked, I remember testing it - but we unfortunately didn't actually have unit tests for any cards because we made them so early on that all their dependencies didn't exist
+- I knew the game was poorly balanced, this is partially because Powell uses an attack that does nothing half the time and partially because players can block but he can't
+- I never thought about the energy icon matching but I completely agree, it's good practice to encourage recognition over recall so users can just see the icon and be like 'Ah, I see, that means energy'
+- The user, who took CSE110 with Powell two years ago, and also took CSE210, thought that we'd done a tremendous amount of work for the time we got, and commented that we would have probably been able to add more features if we'd had a full 10 weeks.
+- I think that kind of defeats the purpose of UAT since we always say 'the developer is not the user' but what if the user is a developer...? Nonetheless I think this perspective is quite valuable.
