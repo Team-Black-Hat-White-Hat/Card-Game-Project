@@ -1,3 +1,7 @@
+# Final Project Videos
+[Public](https://youtu.be/LmWFrdrsTsw?si=jZKLaznlMxMMf2EG)
+[Private](https://www.youtube.com/watch?v=ejcicYYTlAE)
+
 # How to play
 ## Method 1
 1. Download the source code to your local machine
